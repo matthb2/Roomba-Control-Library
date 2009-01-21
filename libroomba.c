@@ -34,6 +34,7 @@ int roomba_init(char* device)
 	write(port_fd,&buf,1); /* Start SCI */
 	buf = 130;
 	write(port_fd,&buf,1); /* Enable Serial Control */
+	tcflush(port_fd,TCIOFLUSH);
 	return(port_fd);
 }
 
@@ -43,6 +44,7 @@ int roomba_safe(int roomba_fd)
 	if(write(roomba_fd,&cmd,1) == 1)
 		return(roomba_fd);
 	printf("Error Writing to Roomba\n");
+	tcflush(roomba_fd,TCIOFLUSH);
 	return(0);
 }
 int roomba_off(int roomba_fd)
@@ -51,6 +53,7 @@ int roomba_off(int roomba_fd)
 	if(write(roomba_fd,&cmd,1) == 1)
 		return(roomba_fd);
 	printf("Error Writing to Roomba\n");
+	tcflush(roomba_fd,TCIOFLUSH);
 	return(0);
 }
 int roomba_play_song(int roomba_fd,char song)
@@ -61,6 +64,7 @@ int roomba_play_song(int roomba_fd,char song)
 	if(write(roomba_fd,&cmd,2) == 2)
 		return(roomba_fd);
 	printf("Error Writing to Roomba\n");
+	tcflush(roomba_fd,TCIOFLUSH);
 	return(0);
 }
 int roomba_define_song(int roomba_fd,char song, char song_data[][2], char length)
@@ -90,6 +94,7 @@ int roomba_define_song(int roomba_fd,char song, char song_data[][2], char length
 		}
 	}
 	write(roomba_fd,cmd_str,(length*2)+3);
+	tcflush(roomba_fd,TCIOFLUSH);
 	free(cmd_str);
 	return(roomba_fd);
 }
@@ -99,4 +104,14 @@ int roomba_free(int roomba_fd)
 	tcsetattr(roomba_fd,TCSANOW,&old_settings);
 	close(roomba_fd);
 	return(0);
+}
+
+int roomba_set_motors(int roomba_fd,char motor_status)
+{
+	char cmd[2];
+	cmd[0]=138;
+	cmd[1]=motor_status;
+	write(roomba_fd,cmd,2);
+	tcflush(roomba_fd,TCIOFLUSH);
+	return(roomba_fd);
 }

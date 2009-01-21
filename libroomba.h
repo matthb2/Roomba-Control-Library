@@ -1,6 +1,10 @@
 #ifndef __LIBROOMBA__
 #define __LIBROOMBA__
 
+#define MAIN_BRUSH_MOTOR 0x04
+#define VACUUM_MOTOR 0x02
+#define SIDE_BRUSH_MOTOR 0x01
+
 int roomba_init(char* device);
 
 /* Put the roomba into safe mode */
@@ -23,4 +27,11 @@ int roomba_play_song(int, char song);
  * song_data[1-16][1] = note duration in 1/64 seconds
  */
 int roomba_define_song(int,char song, char song_data[][2], char length);
+
+/* Set the state of the Roomba's cleaning motors
+ * motor_status is set by or'ing the desired motor constants
+ * (MAIN_BRUSH_MOTOR,VACUUM_MOTOR,SIDE_BRUSH_MOTOR)
+ */
+int roomba_set_motors(int,char motor_status);
+
 #endif
