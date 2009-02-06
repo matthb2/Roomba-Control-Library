@@ -1,6 +1,6 @@
 #ifndef __LIBROOMBA__
 #define __LIBROOMBA__
-
+#include <stdint.h>
 #define MAIN_BRUSH_MOTOR 0x04
 #define VACUUM_MOTOR 0x02
 #define SIDE_BRUSH_MOTOR 0x01
