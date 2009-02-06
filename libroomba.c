@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <arpa/inet.h> //for endianness conversion function
 
 #include "libroomba.h"
 
@@ -115,3 +116,22 @@ int roomba_set_motors(int roomba_fd,char motor_status)
 	tcflush(roomba_fd,TCIOFLUSH);
 	return(roomba_fd);
 }
+
+int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
+{
+	int8_t cmd[5];
+	cmd[0]=137;
+	uint16_t bigendian = htons((uint16_t)speed); //Convert to Big Endian to be portable
+	int8_t* tmp = (int8_t*) &bigendian;
+	cmd[1]=(*tmp);
+	cmd[2]=(*(tmp++));
+	bigendian = htons(radius);
+	tmp = (int8_t*) &bigendian;
+	cmd[3]=(*tmp);
+	cmd[4]=(*(tmp++));
+	write(roomba_fd,cmd,5);
+	tcflush(roomba_fd,TCIOFLUSH);
+	return(roomba_fd);
+}
+
+

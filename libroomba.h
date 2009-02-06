@@ -34,4 +34,16 @@ int roomba_define_song(int,char song, char song_data[][2], char length);
  */
 int roomba_set_motors(int,char motor_status);
 
+/* Moves the Rooba's drive motors
+ * speed is in mm/s (signed)
+ * radius is turn radius in mm (signed, positive is right)
+ * The below constants are special case radi
+ */
+
+#define STRAIGHT_RADIUS 0x8000
+#define CLOCKWISE_INPLACE_RADIUS -1
+#define CCLOCKWISE_INPLACE_RADIUS 1
+
+int roomba_drive(int,int16_t speed, int16_t radius);
+
 #endif
