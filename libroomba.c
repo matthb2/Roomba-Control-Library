@@ -119,16 +119,19 @@ int roomba_set_motors(int roomba_fd,char motor_status)
 
 int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
 {
-	int8_t cmd[5];
+	uint8_t cmd[5];
 	cmd[0]=137;
 	uint16_t bigendian = htons((uint16_t)speed); //Convert to Big Endian to be portable
-	int8_t* tmp = (int8_t*) &bigendian;
+	printf("speed bigendian is %d\n",bigendian);
+	uint8_t* tmp = (uint8_t*) &bigendian;
+	printf("*tmp is %d *tmp casted is %d",*(tmp),*((uint16_t*)tmp));
 	cmd[1]=(*tmp);
 	cmd[2]=(*(tmp++));
 	bigendian = htons(radius);
-	tmp = (int8_t*) &bigendian;
+	tmp = (uint8_t*) &bigendian;
 	cmd[3]=(*tmp);
 	cmd[4]=(*(tmp++));
+	printf("speed is %d mm/s\n",speed);
 	printf("%d %d %d %d %d\n",cmd[0],cmd[1],cmd[2],cmd[3],cmd[4]);
 	write(roomba_fd,cmd,5);
 	tcflush(roomba_fd,TCIOFLUSH);
