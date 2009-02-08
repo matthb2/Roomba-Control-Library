@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 //	roomba_off(fd);
 	tcflush(fd,TCIOFLUSH);
 	roomba_drive(fd,10,STRAIGHT_RADIUS);
-	sleep(1);
+	sleep(5);
 	roomba_drive(fd,0,STRAIGHT_RADIUS);
 	roomba_free(fd);
 	return(0);
