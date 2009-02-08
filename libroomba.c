@@ -129,6 +129,7 @@ int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
 	tmp = (int8_t*) &bigendian;
 	cmd[3]=(*tmp);
 	cmd[4]=(*(tmp++));
+	printf("%d %d %d %d %d\n",cmd[0],cmd[1],cmd[2],cmd[3],cmd[4]);
 	write(roomba_fd,cmd,5);
 	tcflush(roomba_fd,TCIOFLUSH);
 	return(roomba_fd);
