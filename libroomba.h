@@ -90,4 +90,18 @@ enum charge_state { not_charging=0, charging_recovery=1, charging=2,
 #define DRIVE_LEFT_OVERCURRENT 16
 
 int roomba_read_sensor_data(int,struct roomba_sensor_data*);
+
+/* Set LEDs */
+struct roomba_led_status
+{
+	uint8_t dirt_detect:1;
+	uint8_t max:1;
+	uint8_t clean:1;
+	uint8_t spot:1;
+	uint8_t status_red:1;
+	uint8_t status_grn:1;
+	uint8_t padding:2;
+};
+int roomba_set_leds(int,struct roomba_led_status*,uint8_t power_color,
+		uint8_t power_intensity);
 #endif

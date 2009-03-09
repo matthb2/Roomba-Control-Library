@@ -186,3 +186,26 @@ int roomba_read_sensor_data(int roomba_fd, struct roomba_sensor_data* data)
 	return(roomba_fd);
 #endif
 }
+
+int roomba_set_leds(int roomba_fd,struct roomba_led_status* data,
+		uint8_t power_color, uint8_t power_intensity)
+{
+	char cmd[4] = {139,0,0,0};
+	if(data->dirt_detect)
+		cmd[1] |= 0x01;
+	if(data->max)
+		cmd[1] |= 0x02;
+	if(data->clean)
+		cmd[1] |= 0x04;
+	if(data->spot)
+		cmd[1] |= 0x08;
+	if(data->status_red)
+		cmd[1] |= 0x10;
+	if(data->status_red)
+		cmd[1] |= 0x20;
+	cmd[2] = power_color;
+	cmd[3] = power_intensity;
+	if(write(roomba_fd,cmd,4) != 4)
+		perror("Error Writing LED Byte");
+	return(roomba_fd);
+}
