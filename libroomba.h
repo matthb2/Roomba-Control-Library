@@ -50,4 +50,44 @@ int roomba_drive(int,int16_t speed, int16_t radius);
  * it finds a base
  */
 int roomba_force_seeking_dock(int);
+
+/* Sensor Data */
+
+struct roomba_sensor_data
+{
+	uint8_t bumps_wheeldrops;
+	uint8_t wall;
+	uint8_t cliff_left;
+	uint8_t cliff_front_left;
+	uint8_t cliff_front_right;
+	uint8_t cliff_right;
+	uint8_t virtual_wall;
+	uint8_t motor_overcurrent;
+	uint8_t dirt_detector_left;
+	uint8_t dirt_detector_right;
+	uint8_t remote_opcode;
+	uint8_t buttons;
+	int16_t distance; //mm
+	int16_t angle; //mm
+	uint8_t charging_state; //1-5:: see enum
+	uint16_t voltage; //mV
+	int16_t current; //mA
+	int8_t temperature; //degC
+	uint16_t charge; //mAh
+	uint16_t capacity; //mAh
+};
+enum charge_state { not_charging=0, charging_recovery=1, charging=2,
+	trickle_charging=3, waiting=4, charging_error=5};
+#define MAX_BUTTON 1
+#define CLEAN_BUTTON 2
+#define SPOT_BUTTON 4
+#define POWER_BUTTON 8
+
+#define SIDE_BRUSH_OVERCURRENT 1
+#define VACUUM_OVERCURRENT 2
+#define MAIN_BRUSH_OVERCURRENT 4
+#define DRIVE_RIGHT_OVERCURRENT 8
+#define DRIVE_LEFT_OVERCURRENT 16
+
+int roomba_read_sensor_data(int,struct roomba_sensor_data*);
 #endif

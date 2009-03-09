@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <termios.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -141,4 +142,47 @@ int roomba_force_seeking_dock(int roomba_fd)
 		return(0);
 	tcflush(roomba_fd,TCIOFLUSH);
 	return(roomba_fd);
+}
+
+int roomba_read_sensor_data(int roomba_fd, struct roomba_sensor_data* data)
+{
+	char cmd[2] = {142,0};
+	char reply[26];
+	if(write(roomba_fd,cmd,2) != 2)
+	{
+		perror("Error Requesting Sensor Data");
+		return(0);
+	}
+	tcflush(roomba_fd,TCIOFLUSH);
+	if(read(roomba_fd,reply,26) != 26)
+	{
+		perror("Error Getting Sensor Data");
+		return(0);
+	}
+#ifdef STRUCT_JUST_WORKS
+	memcpy(data,reply,26);
+	return(roomba_fd);
+#else
+	data->bumps_wheeldrops = reply[0];
+	data->wall = reply[1];
+	data->cliff_left = reply[2];
+	data->cliff_front_left = reply[3];
+	data->cliff_front_right = reply[4];
+	data->cliff_right = reply[5];
+	data->virtual_wall = reply[6];
+	data->motor_overcurrent = reply[7];
+	data->dirt_detector_left = reply[8];
+	data->dirt_detector_right = reply[9];
+	data->remote_opcode = reply[10];
+	data->buttons = reply[11];
+	data->distance = (int16_t) (0 | reply[12] << 8) | reply[13];
+	data->angle = (int16_t) (0 | reply[14] << 8) | reply[15];
+	data->charging_state = reply[16];
+	data->voltage = (uint16_t) 0 |(reply[17] << 8) | reply[18];
+	data->current = (int16_t) 0 | (reply[19] << 8) | reply[20];
+	data->temperature = reply[21];
+	data->charge = (uint16_t) 0 | (reply[22] << 8) | reply[23];
+	data->capacity = (uint16_t) 0 | (reply[24] << 8) | reply[25];
+	return(roomba_fd);
+#endif
 }
