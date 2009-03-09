@@ -46,4 +46,8 @@ int roomba_set_motors(int,char motor_status);
 
 int roomba_drive(int,int16_t speed, int16_t radius);
 
+/* If the roomba is in a cleaning mode, tells it to dock if
+ * it finds a base
+ */
+int roomba_force_seeking_dock(int);
 #endif

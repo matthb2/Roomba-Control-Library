@@ -133,3 +133,12 @@ int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
 	tcflush(roomba_fd,TCIOFLUSH);
 	return(roomba_fd);
 }
+
+int roomba_force_seeking_dock(int roomba_fd)
+{
+	char cmd = 143;
+	if(write(roomba_fd,&cmd,1) != 1)
+		return(0);
+	tcflush(roomba_fd,TCIOFLUSH);
+	return(roomba_fd);
+}
