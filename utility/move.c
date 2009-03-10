@@ -6,7 +6,7 @@
 /*Debug*/
 #include "libroomba.h"
 #include <curses.h>
-#define SPEED 50
+#define SPEED 500
 int main(int argc, char** argv)
 {
 	initscr(); //setup curses
