@@ -11,6 +11,9 @@ int roomba_init(char* device);
 /* Allows full control unless charger or cliff is detected */
 int roomba_safe(int);
 
+/* Allows full control w/o safety features */
+int roomba_full(int);
+
 /* Releases the port */
 int roomba_free(int);
 

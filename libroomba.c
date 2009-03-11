@@ -49,6 +49,17 @@ int roomba_safe(int roomba_fd)
 	tcflush(roomba_fd,TCIOFLUSH);
 	return(0);
 }
+
+int roomba_full(int roomba_fd)
+{
+	char cmd = 132;
+	if(write(roomba_fd,&cmd,1) == 1)
+		return(roomba_fd);
+	printf("Error Writing to Roomba\n");
+	tcflush(roomba_fd,TCIOFLUSH);
+	return(0);
+}
+
 int roomba_off(int roomba_fd)
 {
 	char cmd=133;

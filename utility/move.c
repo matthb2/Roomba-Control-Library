@@ -6,7 +6,7 @@
 /*Debug*/
 #include "libroomba.h"
 #include <curses.h>
-#define SPEED 500
+#define SPEED 1000
 int main(int argc, char** argv)
 {
 	initscr(); //setup curses
@@ -16,6 +16,7 @@ int main(int argc, char** argv)
 	int fd;
 	fd = roomba_init(argv[1]);
 	roomba_safe(fd);
+	roomba_full(fd);
 	tcflush(fd,TCIOFLUSH);
 	while(1)
 	{
