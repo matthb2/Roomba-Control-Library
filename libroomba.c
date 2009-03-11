@@ -147,13 +147,24 @@ int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
 	current_speed = speed;
 	return(roomba_fd);
 }
-int roomba_ramp_up(int roomba_fd, int16_t speed, int16_t radius, 
+
+int roomba_ramp(int roomba_fd, int16_t speed, int16_t radius, 
 		int16_t increment)
 {
 	int16_t i;
-	for(i=current_speed;i<speed;i+=(speed/increment))
+	i=current_speed;
+	while(i!=speed)
 	{
-		if(i>speed)i=speed;
+		if(current_speed>speed)
+		{
+			i-=increment;
+			if(i>speed)i=speed;
+		}
+		if(current_speed<speed)
+		{
+			i+=increment;
+			if(i<speed)i=speed;
+		}
 		if(roomba_drive(roomba_fd,i,radius) == 0)
 		{
 			printf("Error Setting Drive Speed\n");
@@ -161,23 +172,7 @@ int roomba_ramp_up(int roomba_fd, int16_t speed, int16_t radius,
 		}
 		usleep(RAMP_DELAY);
 	}
-	return roomba_fd;
-}
-int roomba_ramp_down(int roomba_fd, int16_t speed, int16_t radius, 
-		int16_t increment)
-{
-	int16_t i;
-	for(i=current_speed;i>=speed;i-=(speed/increment))
-	{
-		if(i<speed)i=speed;
-		if(roomba_drive(roomba_fd,i,radius) == 0)
-		{
-			printf("Error Setting Drive Speed\n");
-			return(0);
-		}
-		usleep(RAMP_DELAY);
-	}
-	return roomba_fd;
+	return(roomba_drive(roomba_fd,i,radius));
 }
 
 int roomba_force_seeking_dock(int roomba_fd)
