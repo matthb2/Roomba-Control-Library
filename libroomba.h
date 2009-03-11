@@ -47,7 +47,15 @@ int roomba_set_motors(int,char motor_status);
 #define CLOCKWISE_INPLACE_RADIUS -1
 #define CCLOCKWISE_INPLACE_RADIUS 1
 
+/* delay per speed when ramping in uSeconds */
+#define RAMP_DELAY 200
+int16_t current_speed;
+
 int roomba_drive(int,int16_t speed, int16_t radius);
+int roomba_ramp_up(int roomba_fd, int16_t speed, int16_t radius, 
+		int16_t increment);
+int roomba_ramp_down(int roomba_fd, int16_t speed, int16_t radius,
+		int16_t increment);
 
 /* If the roomba is in a cleaning mode, tells it to dock if
  * it finds a base

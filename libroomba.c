@@ -37,6 +37,7 @@ int roomba_init(char* device)
 	buf = 130;
 	write(port_fd,&buf,1); /* Enable Serial Control */
 	tcflush(port_fd,TCIOFLUSH);
+	current_speed = 0;
 	return(port_fd);
 }
 
@@ -143,7 +144,40 @@ int roomba_drive(int roomba_fd, int16_t speed, int16_t radius)
 	cmd.cmdints[2] = htons((uint16_t)radius);
 	write(roomba_fd,(cmd.cmdstr+1),5);
 	tcflush(roomba_fd,TCIOFLUSH);
+	current_speed = speed;
 	return(roomba_fd);
+}
+int roomba_ramp_up(int roomba_fd, int16_t speed, int16_t radius, 
+		int16_t increment)
+{
+	int16_t i;
+	for(i=current_speed;i<speed;i+=(speed/increment))
+	{
+		if(i>speed)i=speed;
+		if(roomba_drive(roomba_fd,i,radius) == 0)
+		{
+			printf("Error Setting Drive Speed\n");
+			return(0);
+		}
+		usleep(RAMP_DELAY);
+	}
+	return roomba_fd;
+}
+int roomba_ramp_down(int roomba_fd, int16_t speed, int16_t radius, 
+		int16_t increment)
+{
+	int16_t i;
+	for(i=current_speed;i>=speed;i-=(speed/increment))
+	{
+		if(i<speed)i=speed;
+		if(roomba_drive(roomba_fd,i,radius) == 0)
+		{
+			printf("Error Setting Drive Speed\n");
+			return(0);
+		}
+		usleep(RAMP_DELAY);
+	}
+	return roomba_fd;
 }
 
 int roomba_force_seeking_dock(int roomba_fd)
