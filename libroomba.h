@@ -98,6 +98,15 @@ enum charge_state { not_charging=0, charging_recovery=1, charging=2,
 #define DRIVE_RIGHT_OVERCURRENT 8
 #define DRIVE_LEFT_OVERCURRENT 16
 
+#define BUMP_RIGHT 1
+#define BUMP_LEFT 2
+#define DROP_RIGHT 4
+#define DROP_LEFT 8
+#define DROP_CASTER 16
+
+#define ROOMBA_ANGLE_RAD(x) ((2*x)/258)
+#define ROOMBA_ANGLE_DEG(x) (360*x)/(258 * M_PI)
+
 int roomba_read_sensor_data(int,struct roomba_sensor_data*);
 
 /* Set LEDs */
