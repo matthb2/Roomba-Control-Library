@@ -1,0 +1,10 @@
+This code provides a simple C interface to the Roomba Serial Command Interface
+(http://www.irobot.com/images/consumer/hacker/Roomba_SCI_Spec_Manual.pdf)
+
+Documentation and build scripts coming soon, but for now most functions seem to work on recent Linux systems (and probably most other *NIX systems).
+
+The serial cable needed to use the SCI can be built based on the spec, or  purchased from either iRobot or a number of other online electronics shops.
+
+Note that this is not in any way affiliated with or authorized by iRobot inc.
+
+Happy Cleaning!
